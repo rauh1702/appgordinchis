@@ -1,9 +1,9 @@
 [app]
 # (str) Title of your application
- title = Gordinchis
+title = Gordinchis
 # (str) Package name
 package.name = gordinchis
-# (str) Package domain (needed for android/ios packaging)
+# (str) Package domain (needed for Android/iOS packaging)
 package.domain = org.rauh1702
 # (str) Source code where main.py lives
 source.dir = .
@@ -13,29 +13,23 @@ source.include_exts = py,png,jpg,jpeg,mp3,wav,mp4,zip
 version = 1.0
 # (str) Application requirements
 requirements = python3,kivy,numpy
-# (str) Supported orientation (one of landscape, sensorLandscape, portrait or all)
+# (str) Supported orientation
 orientation = landscape
-# (str) Full name including package domain
-# package.name + package.domain determines the Android application id
 
 [buildozer]
 log_level = 2
 warn_on_root = 0
 
 [android]
-# (str) Android API to use
+# Android SDK/NDK configuration
 android.api = 35
-# (str) Minimum API your app supports
 android.minapi = 23
-# (str) Android NDK version
 android.ndk = 27c
-# (str) Android architectures to build for
 android.archs = arm64-v8a, armeabi-v7a
-# (str) Python-for-Android branch to use
 p4a.branch = master
-# (str) Android app theme
 android.presplash_color = #FFFFFF
-# (bool) Enable AndroidX support
 android.enable_androidx = True
-# Automatically accept Android SDK licenses during automated builds
+# Use the SDK prepared by GitHub Actions instead of Buildozer downloading its own old SDK.
+android.sdk_path = %(source.dir)s/.buildozer/android/platform/android-sdk
+android.skip_update = True
 android.accept_sdk_license = True
