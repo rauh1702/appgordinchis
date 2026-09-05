@@ -37,3 +37,5 @@ p4a.branch = master
 android.presplash_color = #FFFFFF
 # (bool) Enable AndroidX support
 android.enable_androidx = True
+# Automatically accept Android SDK licenses during automated builds
+android.accept_sdk_license = True
