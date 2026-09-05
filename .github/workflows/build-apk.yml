@@ -30,19 +30,34 @@ jobs:
         shell: bash
         run: |
           set -euxo pipefail
-          SDK="$GITHUB_WORKSPACE/.buildozer/android/platform/android-sdk"
+          SDK="$HOME/.buildozer/android/platform/android-sdk"
           rm -rf "$SDK"
-          mkdir -p "$SDK/cmdline-tools"
+          mkdir -p "$SDK/cmdline-tools" "$SDK/tools/bin" "$SDK/licenses"
           cd /tmp
           curl -fsSLo commandlinetools.zip https://dl.google.com/android/repository/commandlinetools-linux-13114758_latest.zip
           rm -rf cmdline-tools
           mkdir -p cmdline-tools
           unzip -q commandlinetools.zip -d cmdline-tools
           mv cmdline-tools/cmdline-tools "$SDK/cmdline-tools/latest"
-          mkdir -p "$SDK/tools/bin"
           ln -sf "$SDK/cmdline-tools/latest/bin/sdkmanager" "$SDK/tools/bin/sdkmanager"
           ln -sf "$SDK/cmdline-tools/latest/bin/avdmanager" "$SDK/tools/bin/avdmanager"
-          yes | "$SDK/tools/bin/sdkmanager" --sdk_root="$SDK" --licenses >/dev/null || true
+
+          cat > "$SDK/licenses/android-sdk-license" <<'EOF'
+8933bad161af4178b1185d1a37fbf41ea5269c55
+d56f5187479451eabf01fb78af6dfcb131a6481e
+24333f8a63b6825ea9c5514f83c2829b004d1fee
+EOF
+          cat > "$SDK/licenses/android-sdk-preview-license" <<'EOF'
+84831b9409646a918e30573bab4c9c91346d8abd
+EOF
+          cat > "$SDK/licenses/android-sdk-preview-license-old" <<'EOF'
+79120722343a6f314e0719f863036c702b0e6b2a
+84831b9409646a918e30573bab4c9c91346d8abd
+EOF
+          cat > "$SDK/licenses/intel-android-extra-license" <<'EOF'
+d975f751698a77b662f1254ddbeed3901e976f5a
+EOF
+
           "$SDK/tools/bin/sdkmanager" --sdk_root="$SDK" \
             "platform-tools" \
             "platforms;android-35" \
