@@ -23,7 +23,7 @@ jobs:
       - name: Prepare Android SDK for Buildozer
         run: |
           set -euxo pipefail
-          SDK="$HOME/.buildozer/android/platform/android-sdk"
+          SDK="$GITHUB_WORKSPACE/.buildozer/android/platform/android-sdk"
           rm -rf "$SDK"
           mkdir -p "$SDK/cmdline-tools" "$SDK/tools/bin" "$SDK/licenses"
           cd /tmp
