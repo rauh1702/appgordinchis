@@ -49,9 +49,10 @@ EOF
           cat > "$SDK/licenses/intel-android-extra-license" <<'EOF'
 d975f751698a77b662f1254ddbeed3901e976f5a
 EOF
-          "$SDK/tools/bin/sdkmanager" --sdk_root="$SDK" "platform-tools" "platforms;android-35" "build-tools;37.0.0"
+          "$SDK/tools/bin/sdkmanager" --sdk_root="$SDK" "platform-tools" "platforms;android-35" "build-tools;37.0.0" "ndk;27.2.12479018"
           test -x "$SDK/build-tools/37.0.0/aidl"
           test -d "$SDK/platforms/android-35"
+          test -d "$SDK/ndk/27.2.12479018"
           echo "ANDROIDSDK=$SDK" >> "$GITHUB_ENV"
           echo "ANDROID_HOME=$SDK" >> "$GITHUB_ENV"
           echo "PATH=$SDK/platform-tools:$SDK/cmdline-tools/latest/bin:$PATH" >> "$GITHUB_ENV"
