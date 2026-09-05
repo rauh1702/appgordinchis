@@ -1,12 +1,6 @@
 name: Build Android APK
 
-on:
-  workflow_dispatch:
-  push:
-    paths:
-      - 'main.py'
-      - 'buildozer.spec'
-      - '.github/workflows/build-apk.yml'
+on: [push, workflow_dispatch]
 
 jobs:
   build:
@@ -27,7 +21,6 @@ jobs:
           java -version
 
       - name: Prepare Android SDK for Buildozer
-        shell: bash
         run: |
           set -euxo pipefail
           SDK="$HOME/.buildozer/android/platform/android-sdk"
@@ -41,7 +34,6 @@ jobs:
           mv cmdline-tools/cmdline-tools "$SDK/cmdline-tools/latest"
           ln -sf "$SDK/cmdline-tools/latest/bin/sdkmanager" "$SDK/tools/bin/sdkmanager"
           ln -sf "$SDK/cmdline-tools/latest/bin/avdmanager" "$SDK/tools/bin/avdmanager"
-
           cat > "$SDK/licenses/android-sdk-license" <<'EOF'
 8933bad161af4178b1185d1a37fbf41ea5269c55
 d56f5187479451eabf01fb78af6dfcb131a6481e
@@ -57,11 +49,7 @@ EOF
           cat > "$SDK/licenses/intel-android-extra-license" <<'EOF'
 d975f751698a77b662f1254ddbeed3901e976f5a
 EOF
-
-          "$SDK/tools/bin/sdkmanager" --sdk_root="$SDK" \
-            "platform-tools" \
-            "platforms;android-35" \
-            "build-tools;37.0.0"
+          "$SDK/tools/bin/sdkmanager" --sdk_root="$SDK" "platform-tools" "platforms;android-35" "build-tools;37.0.0"
           test -x "$SDK/build-tools/37.0.0/aidl"
           test -d "$SDK/platforms/android-35"
           echo "ANDROIDSDK=$SDK" >> "$GITHUB_ENV"
