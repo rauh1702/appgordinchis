@@ -1,70 +1,9 @@
 name: Build Android APK
-
-on:
-  push:
-    branches: [main]
-  workflow_dispatch:
-
+on: push
 jobs:
   build:
     runs-on: ubuntu-22.04
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-
+      - uses: actions/checkout@v4
       - name: Test runner
-        run: |
-          echo "GitHub Actions runner started"
-          uname -a
-          python3 --version
-
-      - name: Install build dependencies
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y build-essential git zip unzip openjdk-17-jdk python3-pip python3-venv autoconf automake libtool pkg-config zlib1g-dev libffi-dev libssl-dev curl
-          echo "JAVA_HOME=/usr/lib/jvm/java-17-openjdk-amd64" >> "$GITHUB_ENV"
-          echo "/usr/lib/jvm/java-17-openjdk-amd64/bin" >> "$GITHUB_PATH"
-          java -version
-
-      - name: Prepare Android SDK
-        run: |
-          set -euxo pipefail
-          SDK="$GITHUB_WORKSPACE/.buildozer/android/platform/android-sdk"
-          rm -rf "$SDK"
-          mkdir -p "$SDK/cmdline-tools" "$SDK/tools/bin" "$SDK/licenses"
-          cd /tmp
-          curl -fsSLo commandlinetools.zip https://dl.google.com/android/repository/commandlinetools-linux-13114758_latest.zip
-          rm -rf cmdline-tools
-          mkdir cmdline-tools
-          unzip -q commandlinetools.zip -d cmdline-tools
-          mv cmdline-tools/cmdline-tools "$SDK/cmdline-tools/latest"
-          ln -sf "$SDK/cmdline-tools/latest/bin/sdkmanager" "$SDK/tools/bin/sdkmanager"
-          cat > "$SDK/licenses/android-sdk-license" <<'EOF'
-8933bad161af4178b1185d1a37fbf41ea5269c55
-d56f5187479451eabf01fb78af6dfcb131a6481e
-24333f8a63b6825ea9c5514f83c2829b004d1fee
-EOF
-          cat > "$SDK/licenses/android-sdk-preview-license" <<'EOF'
-84831b9409646a918e30573bab4c9c91346d8abd
-EOF
-          "$SDK/tools/bin/sdkmanager" --sdk_root="$SDK" "platform-tools" "platforms;android-35" "build-tools;37.0.0" "ndk;27.2.12479018"
-          test -x "$SDK/build-tools/37.0.0/aidl"
-          test -d "$SDK/platforms/android-35"
-          test -d "$SDK/ndk/27.2.12479018"
-          echo "ANDROIDSDK=$SDK" >> "$GITHUB_ENV"
-          echo "ANDROID_HOME=$SDK" >> "$GITHUB_ENV"
-          echo "$SDK/platform-tools:$SDK/cmdline-tools/latest/bin" >> "$GITHUB_PATH"
-
-      - name: Install Buildozer
-        run: |
-          python3 -m pip install --upgrade pip setuptools wheel
-          python3 -m pip install --upgrade "Cython<3" buildozer
-
-      - name: Build APK
-        run: buildozer -y android debug
-
-      - name: Upload APK
-        uses: actions/upload-artifact@v4
-        with:
-          name: gordinchis-apk
-          path: bin/*.apk
+        run: echo "GitHub Actions runner OK"
